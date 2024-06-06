@@ -1,22 +1,27 @@
 require "spec_helper"
 
 RSpec.describe Workflows::State do
-  context "changing a card's state" do
-    it "raises a Workflows::State::InvalidAction exception if the given action is not valid" do
-      @state = Workflows::State.new(name: "Some state", actions: [])
-      @card = Workflows::Card.new(state: @state)
+  context "performing an action" do
+    it "updates the card's state and tells it to emit some outputs" do
+      @dispatched = Workflows::State.new(name: "Dispatched", actions: {})
+      @dispatch = Workflows::Action.new(destination: @dispatched, outputs: ["card.dispatched"])
+      @initial = Workflows::State.new(name: "Iniital", actions: {dispatch: @dispatch})
+      @workflow = Workflows::Workflow.new(name: "Order processing", states: [@initial, @dispatched])
 
-      expect { @state.perform_action("some_action", card: @card) }.to raise_exception(Workflows::State::InvalidAction)
+      @card = Workflows::Card.new(id: "123", name: "New order", state: @initial)
+
+      expect(Workflows.cards).to receive(:update).with(@card, state: @dispatched).and_return(@card)
+      expect(@card).to receive(:emit).with("card.dispatched")
+
+      @initial.perform_action "dispatch", card: @card
     end
+  end
 
-    it "tells the action to act on the card" do
-      @action = Workflows::Action.new(name: "some_action")
-      @state = Workflows::State.new(name: "Some state", actions: [@action])
-      @card = Workflows::Card.new(state: @state)
+  it "raises an InvalidAction exception if the action is not valid" do
+    @initial = Workflows::State.new(name: "Iniital", actions: {})
 
-      expect(@action).to receive(:act_on).with(@card)
+    @card = Workflows::Card.new(id: "123", name: "New order", state: @initial)
 
-      @state.perform_action("some_action", card: @card)
-    end
+    expect { @initial.perform_action "dispatch", card: @card }.to raise_exception(Workflows::State::InvalidAction)
   end
 end

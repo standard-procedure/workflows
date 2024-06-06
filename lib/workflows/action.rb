@@ -4,13 +4,8 @@ require "dry/struct"
 
 module Workflows
   class Action < Dry::Struct
-    attribute :name, Types::Strict::String
-
-    def act_on card
-    end
-
-    def to_s
-      name
-    end
+    include NameToS
+    attribute :destination, Types::State
+    attribute :outputs, Types::Array.of(Types::Coercible::String)
   end
 end

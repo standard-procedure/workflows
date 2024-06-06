@@ -5,10 +5,9 @@ require_relative "state"
 
 module Workflows
   class Workflow < Dry::Struct
-    attribute :name, Types::Strict::String
-    attribute :states, Types::Strict::Array.of(Workflows::State)
-    def to_s
-      name
-    end
+    include NameToS
+
+    attribute :name, Types::Name
+    attribute :states, Types::States
   end
 end

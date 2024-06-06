@@ -5,27 +5,20 @@ require_relative "action"
 
 module Workflows
   class State < Dry::Struct
-    attribute :name, Types::Strict::String
-    attribute :actions, Types::Strict::Array.of(Workflows::Action)
+    include NameToS
+    attribute :name, Types::Name
+    attribute :actions, Types::Actions
 
-    def perform_action action, card:
-      action = find_action_by_name(action)
+    def perform_action action_name, card:
+      card = Types::Card[card]
+      action = actions[action_name]
       raise InvalidAction.new(action) if action.nil?
-      puts "FOUND ACTION #{action}"
-      action.act_on card
-    end
-
-    def to_s
-      name
+      card = Workflows.cards.update card, state: action.destination
+      action.outputs.each do |output|
+        card.emit output
+      end
     end
 
     class InvalidAction < Workflows::Error; end
-
-    private
-
-    def find_action_by_name name
-      name = name.to_s.strip
-      actions.find { |a| a.name == name }
-    end
   end
 end
