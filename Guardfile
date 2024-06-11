@@ -1,16 +1,5 @@
 ignore(/bin/, /log/, /public/, /storage/, /tmp/)
 
-group :formatting do
-  guard :standardrb, fix: true, all_on_start: true, progress: true do
-    watch(/.+\.rb$/)
-    watch(/.+\.thor$/)
-    watch(/.+\.rake$/)
-    watch(/Guardfile$/)
-    watch(/Rakefile$/)
-    watch(/Gemfile$/)
-  end
-end
-
 group :development do
   guard :rspec, cmd: "bundle exec rspec" do
     watch("spec/.+_helper.rb") { "spec" }

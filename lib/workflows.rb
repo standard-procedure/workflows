@@ -2,6 +2,7 @@
 
 require "dry/types"
 require "dry/configurable"
+require "plumbing"
 
 module Workflows
   extend Dry::Configurable
@@ -13,13 +14,13 @@ module Workflows
     Name = Strict::String
 
     Card = Types.Interface(:id, :name, :state)
-    Storage = Types.Interface(:create, :find, :where, :update, :delete)
     State = Types.Interface(:name, :perform_action)
     States = Types::Array.of(Types::State)
     Action = Types.Interface(:destination, :outputs)
     Actions = Types::Hash.map(Types::Coercible::String, Types::Action)
-    Services = Types.Interface(:[], :resolve)
-    Messages = Types.Interface(:publish, :subscribe)
+    Operation = Types.Interface(:call)
+    Services = Types::Hash.map(Types::Coercible::String, Types::Operation)
+    Messages = Types.Interface(:<<, :add_observer, :remove_observer)
     Workflow = Types.Interface(:states, :services, :messages)
   end
 
@@ -32,5 +33,8 @@ module Workflows
   require_relative "workflows/workflow"
   require_relative "workflows/card"
 
-  setting :cards, default: InMemoryCards, reader: true
+  # @return [Plumbing::Pipe] message queue for broadcasting events
+  setting :messages, default: Plumbing::Pipe.start, reader: true
+  # @return [Hash] a set of services available within this service
+  setting :services, default: {}, reader: true
 end

@@ -32,7 +32,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "dry-configurable"
-  spec.add_dependency "dry-events"
+  spec.add_dependency "standard-procedure-plumbing"
   spec.add_dependency "dry-struct"
   spec.add_dependency "faker"
 end

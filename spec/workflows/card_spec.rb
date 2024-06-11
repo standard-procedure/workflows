@@ -9,6 +9,4 @@ RSpec.describe Workflows::Card do
 
     @card.perform("some_action")
   end
-
-  it "emits an event"
 end
