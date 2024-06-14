@@ -10,7 +10,7 @@ RSpec.describe Workflows::State do
       @dispatched = Workflows::State.new(name: "Dispatched", actions: {})
       @dispatch = Workflows::Action.new(destination: @dispatched, outputs: ["card.dispatched"])
       @initial = Workflows::State.new(name: "Iniital", actions: {dispatch: @dispatch})
-      @workflow = Workflows::Workflow.new(name: "Order processing", states: [@initial, @dispatched])
+      @workflow = Workflows::Workflow.new(id: "123", name: "Order processing", states: [@initial, @dispatched])
       @pipe = Workflows.messages
 
       @card = Workflows::Card.new(id: "123", name: "New order", state: @initial)

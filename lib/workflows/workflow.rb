@@ -8,6 +8,7 @@ module Workflows
   class Workflow < Dry::Struct
     include NameToS
 
+    attribute :id, Types::ID
     # @return [String]
     attribute :name, Types::Name
     # @return [Array(Workflows::State)]

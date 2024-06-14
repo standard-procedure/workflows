@@ -5,8 +5,6 @@ group :development do
     watch("spec/.+_helper.rb") { "spec" }
     watch(%r{^spec/.+_spec\.rb$})
     watch(%r{^lib/(.+)\.rb$}) { |m| "spec/#{m[1]}_spec.rb" }
-    watch(%r{^spec/stories/.+\.feature}) { |m| "spec/stories" }
-    watch(%r{^spec/stories/.+_steps.rb}) { |m| "spec/stories" }
   end
 
   guard :bundler do
