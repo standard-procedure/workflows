@@ -8,7 +8,23 @@ module Workflows
   class State < Dry::Struct
     include NameToS
     # @return [String]
-    attribute :name, Types::Name
+    attribute :name, Types::String
+    # @return [String]
+    attribute :type, Types::StateType
+    # @return [String]
+    attribute :description, Types::String.default("")
+    # @return [Integer]
+    attribute :default_deadline, Types::Integer.default(7)
+    # @return [String]
+    attribute :colour, Types::Colour
+    # @return [String]
+    attribute :assignment_instructions, Types::String.default("")
+    # @return [String]
+    attribute :completion_by, Types::CompletionBy
+    # @return [Array<String>]
+    attribute :assign_to, Types::Array.of(Types::String).default([])
+    # @return [Array<String>]
+    attribute :assign_to_groups, Types::Array.of(Types::String).default([])
     # @return [Array(Workflows::Action)]
     attribute :actions, Types::Actions
 

@@ -1,0 +1,47 @@
+name: Approvals
+states:
+  - name: Requires review
+    type: initial
+    description: Documents require review
+    colour: warning
+    type: initial
+    default_deadline: 3
+    assign_to_groups:
+      - Document reviewers
+    assignment_instructions: Please review the attached documents
+    completion_by: anyone
+    actions:
+      - name: Reject
+        colour: danger
+        prompt: Reason for rejection
+        move_to: Rejected
+        automations:
+          - Move to rejected folder
+      - name: Requires modification
+        colour: warning
+        prompt: Changes required
+        move_to: Requires modification
+      - name: Approve
+        colour: success
+        move_to: Approved
+        automations:
+          - Move to approved folder
+  - name: Requires modification
+    description: Documents require modification
+    colour: warning
+    default_deadline: 14
+    assign_to:
+      - originator
+    assignment_instructions: Please make modifications
+    completion_by: anyone
+    actions:
+      - name: Resubmit
+        colour: success
+        prompt: Modification details
+        move_to: Requires review
+  - name: Approved
+    type: completed
+    colour: success
+  - name: Rejected
+    type: completed
+    colour: danger
