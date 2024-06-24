@@ -14,5 +14,9 @@ module Workflows
     attribute :description, Types::String.default("")
     # @return [Array(Workflows::State)]
     attribute :states, Types::States
+
+    def create_task title:
+      Workflows.services["workflows.tasks.create"].call title: title
+    end
   end
 end

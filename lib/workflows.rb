@@ -33,7 +33,7 @@ module Workflows
   require_relative "workflows/action"
   require_relative "workflows/state"
   require_relative "workflows/workflow"
-  require_relative "workflows/card"
+  require_relative "workflows/task"
   require_relative "workflows/builder"
 
   # @return [Plumbing::Pipe] message queue for broadcasting events
